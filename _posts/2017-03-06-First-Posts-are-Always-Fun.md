@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "First Post is Always Fun!"
+title:  "First Posts are Always Fun!"
 date:   2017-03-06 22:22:22 +0100
 categories: Jekyll, Git
 ---
