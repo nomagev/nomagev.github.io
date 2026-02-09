@@ -89,60 +89,64 @@
             </div>
         </div>
     </div>
-
     <script>
-        // Simple script to fetch your repos directly from GitHub API
         async function getRepos() {
-            const response = await fetch('https://api.github.com/users/nomagev/repos?sort=updated');
-            const repos = await response.json();
-            const container = document.getElementById('repo-list');
-            container.innerHTML = ''; // Clear loading
-            
-            repos.forEach(repo => {
-                if(repo.name !== 'nomagev.github.io') {
-                    container.innerHTML += `
-                        <div class="nes-container is-rounded is-dark" style="margin-bottom: 15px;">
-                            <p>${repo.name}</p>
-                            <p style="font-size: 12px; color: #aaa;">${repo.description || 'No description'}</p>
-                            <a href="${repo.html_url}" class="nes-btn is-primary">START</a>
-                        </div>`;
-                }
-            });
+            try {
+                const response = await fetch('https://api.github.com/users/nomagev/repos?sort=updated');
+                const repos = await response.json();
+                const container = document.getElementById('repo-list');
+                container.innerHTML = ''; 
+                
+                repos.forEach(repo => {
+                    if(repo.name !== 'nomagev.github.io') {
+                        container.innerHTML += `
+                            <div class="nes-container is-rounded is-dark" style="margin-bottom: 15px;">
+                                <p>${repo.name}</p>
+                                <p style="font-size: 12px; color: #aaa;">${repo.description || 'No description'}</p>
+                                <a href="${repo.html_url}" class="nes-btn is-primary">START</a>
+                            </div>`;
+                    }
+                });
+            } catch (e) { console.error("Repo fetch failed", e); }
         }
-        getRepos();
+
         async function loadAsciiArt() {
             try {
                 const response = await fetch('blim_art.txt');
-                if (!response.ok) throw new Error('Art not found');
-                const art = await response.text();
                 const artContainer = document.getElementById('ascii-header');
-                artContainer.textContent = art;
-        
-                // Start the glitch cycle ONLY after art is loaded
+                if (!response.ok) {
+                    artContainer.textContent = 'NOMAGEV';
+                } else {
+                    const art = await response.text();
+                    artContainer.textContent = art;
+                }
+                // Trigger the first glitch loop
                 randomGlitch(); 
             } catch (error) {
-                console.error('Error loading ASCII art:', error);
                 document.getElementById('ascii-header').textContent = 'NOMAGEV';
             }
         }
+
         function randomGlitch() {
             const el = document.getElementById('ascii-header');
             if (!el) return;
 
-            // Apply the animation briefly
+            // 1. Remove animation
+            el.style.animation = 'none';
+            
+            // 2. FORCE REFLOW (The "Magic" Line)
+            // This makes the browser forget the animation was ever there
+            void el.offsetWidth; 
+
+            // 3. Re-apply animation
             el.style.animation = "glitch 200ms linear";
 
-            // After 200ms, remove the animation so it can be triggered again
-            setTimeout(() => {
-                el.style.animation = "none";
-                
-                // Wait a random amount of time (1 to 4 seconds) before glitching again
-                const nextGlitch = Math.random() * 3000 + 1000;
-                setTimeout(randomGlitch, nextGlitch);
-            }, 200);
+            // 4. Schedule next glitch
+            const nextGlitchTime = Math.random() * 3000 + 1000;
+            setTimeout(randomGlitch, nextGlitchTime);
         }
 
-        // Start the sequence
+        // Initialize
         getRepos();
         loadAsciiArt();
     </script>
