@@ -127,7 +127,15 @@
             0% { bottom: 100%; }
             100% { bottom: -100%; }
         }
+        
+        footer .nes-container {
+            padding: 1.5rem;
+            border-image-repeat: stretch; /* Fixes some NES.css border artifacts */
+        }
 
+        footer .nes-icon {
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
@@ -158,6 +166,42 @@
               <p><strong>Loading Repositories...</strong></p>
             </div>
         </div>
+        
+        <footer style="margin-top: 50px;">
+            <section class="nes-container is-dark">
+                <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;">
+            
+                    <div style="margin: 10px;">
+                        <p class="nes-text is-warning" style="font-size: 12px; margin-bottom: 5px;">LICENSE</p>
+                        <p style="font-size: 10px;">
+                            <i class="nes-icon shield is-small"></i> 
+                            GPL v2.0 - OPEN SOURCE
+                        </p>
+                    </div>
+
+                    <div style="margin: 10px;">
+                        <p class="nes-text is-primary" style="font-size: 12px; margin-bottom: 5px;">SYSTEM OWNER</p>
+                        <p style="font-size: 10px;">@NOMAGEV</p>
+                    </div>
+
+                    <div style="margin: 10px;">
+                        <p class="nes-text is-error" style="font-size: 12px; margin-bottom: 5px;">POWERED BY</p>
+                        <div style="display: flex; gap: 10px;">
+                            <i class="nes-logo"></i>
+                            <span style="font-size: 10px;">NES.css & BLIM.PY</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr class="nes-hr">
+        
+                <div style="text-align: center; font-size: 8px; color: #666;">
+                    <p>BUILD VERSION 2026.02.09 // ALL RIGHTS RESERVED TO THE COMMONS</p>
+             </div>
+            </section>
+        </footer>
+
     </div>
     <script>
         async function getRepos() {
