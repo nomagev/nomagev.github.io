@@ -4,10 +4,72 @@
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link href="https://unpkg.com/nes.css/css/nes.min.css" rel="stylesheet">
     <style>
+        /* 1. Your existing base styles */
         body { background-color: #212529; color: white; font-family: 'Press Start 2P', cursive; padding: 20px; }
         .container { max-width: 900px; margin: auto; }
         .repo-card { margin-bottom: 20px; background-color: #fff; color: #212529; }
-        .ascii-art { font-family: monospace; white-space: pre; font-size: 10px; line-height: 1.2; text-align: center; color: #209cee; }
+
+        /* 2. Updated .ascii-art class (merged) */
+        .ascii-art { 
+            font-family: monospace; 
+            white-space: pre; 
+            font-size: 10px; 
+            line-height: 1.2; 
+            text-align: center; 
+            color: #209cee; 
+        
+            /* New Glitch Properties */
+            position: relative;
+            display: block; /* Changed from inline-block to center better */
+            margin: 0 auto;
+            text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                        -0.025em -0.05em 0 rgba(0, 255, 0, 0.75),
+                        0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            animation: glitch 500ms infinite;
+        }
+
+        /* 3. Scanline effect class */
+        .scanline {
+            width: 100%;
+            height: 10px; /* Thinner for a more subtle look */
+            z-index: 10;
+            background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(255, 255, 255, 0.1) 50%, rgba(0, 0, 0, 0) 100%);
+            opacity: 0.1;
+            position: absolute;
+            bottom: 100%;
+            animation: scanline 3s linear infinite;
+        }
+
+        /* 4. The Animation "Math" (Keyframes) */
+        @keyframes glitch {
+            0%, 14%, 49%, 99% {
+                text-shadow: 0.05em 0 0 rgba(255, 0, 0, 0.75),
+                            -0.05em -0.025em 0 rgba(0, 255, 0, 0.75),
+                            -0.025em 0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+            15% {
+                text-shadow: -0.05em -0.025em 0 rgba(255, 0, 0, 0.75),
+                             0.025em 0.025em 0 rgba(0, 255, 0, 0.75),
+                            -0.05em -0.05em 0 rgba(0, 0, 255, 0.75);
+                transform: translate(-2px, 1px);
+            }
+            50% {
+                text-shadow: 0.025em 0.05em 0 rgba(255, 0, 0, 0.75),
+                             0.05em 0 0 rgba(0, 255, 0, 0.75),
+                             0 -0.05em 0 rgba(0, 0, 255, 0.75);
+                transform: translate(2px, -1px);
+            }
+            100% {
+                text-shadow: -0.025em 0 0 rgba(255, 0, 0, 0.75),
+                             -0.025em -0.025em 0 rgba(0, 255, 0, 0.75),
+                             -0.025em -0.05em 0 rgba(0, 0, 255, 0.75);
+            }
+        }
+
+        @keyframes scanline {
+            0% { bottom: 100%; }
+            100% { bottom: -100%; }
+        }
     </style>
 </head>
 <body>
@@ -68,6 +130,21 @@
         }
         // Call it when the page loads
         loadAsciiArt();
+        function randomGlitch() {
+            const el = document.getElementById('ascii-header');
+    
+            // Add the glitch class
+            el.style.animation = "glitch 200ms duration linear";
+    
+            // Randomly trigger a visual "spike"
+            setTimeout(() => {
+                el.style.animation = "none";
+                // Re-run this function at a random interval between 2 and 5 seconds
+                setTimeout(randomGlitch, Math.random() * 3000 + 2000);
+            }, 150);
+        }
+        // Start the cycle after the art is fetched
+        loadAsciiArt().then(() => randomGlitch());
     </script>
 </body>
 </html>
