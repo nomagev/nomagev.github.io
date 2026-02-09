@@ -1,0 +1,17 @@
+name: Refresh Nomagev Hub
+on:
+  schedule:
+    # Runs every day at midnight to check for new repos
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allows you to run it manually with a button click
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger GitHub Pages Deploy
+        run: |
+          curl -X POST \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/${{ github.repository }}/pages/builds
