@@ -14,13 +14,11 @@
     <div class="container">
         <section class="nes-container with-title is-dark">
             <p class="title">NOMAGEV.SYS</p>
-            <div class="ascii-art">
-                [ BLIM.PY ASCII ART ]
-            </div>
+            <pre id="ascii-header" class="ascii-art">Loading system art...</pre>
         </section>
 
         <section class="nes-container is-rounded is-dark" style="margin-top: 20px;">
-            <p>Current Quest: Markdown Support</p>
+            <p>Current Quest: Code Refactoring</p>
             <progress class="nes-progress is-primary" value="40" max="100"></progress>
         </section>
 
@@ -53,6 +51,23 @@
             });
         }
         getRepos();
+        async function loadAsciiArt() {
+            try {
+                const response = await fetch('blim_art.txt');
+                if (!response.ok) throw new Error('Art not found');
+        
+                const art = await response.text();
+                const artContainer = document.getElementById('ascii-header');
+        
+                // Display the art
+                artContainer.textContent = art;
+            } catch (error) {
+                console.error('Error loading ASCII art:', error);
+                document.getElementById('ascii-header').textContent = 'NOMAGEV';
+            }
+        }
+        // Call it when the page loads
+        loadAsciiArt();
     </script>
 </body>
 </html>
